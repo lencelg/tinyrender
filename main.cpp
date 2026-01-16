@@ -1,4 +1,5 @@
 #include <cmath>
+#include <utility>
 #include "tgaimage.h"
 
 constexpr TGAColor white   = {255, 255, 255, 255}; // attention, BGRA order
@@ -8,8 +9,9 @@ constexpr TGAColor blue    = {255, 128,  64, 255};
 constexpr TGAColor yellow  = {  0, 200, 255, 255};
 
 void plot_line(int ax, int ay, int bx, int by, TGAImage& framebuffer, TGAColor color) {
-    for (float t = .0; t < 1.0; t += 0.02) {
-        float x = ax + t * (bx - ax);
+    if(ax > bx) std::swap(ax, bx), std::swap(ay, by);
+    for (int x = ax; x <= bx; x++) {
+        float t = (x - ax) / static_cast<float>(bx - ax);
         float y = ay + t * (by - ay);
         framebuffer.set(x, y, color);
     }
